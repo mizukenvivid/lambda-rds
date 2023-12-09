@@ -3,6 +3,7 @@ import { App, TerraformStack } from "cdktf";
 import { AwsProvider } from '@cdktf/provider-aws/lib/provider'
 import { Vpc } from "@cdktf/provider-aws/lib/vpc";
 import { Subnet } from "@cdktf/provider-aws/lib/subnet";
+import { DbSubnetGroup } from "@cdktf/provider-aws/lib/db-subnet-group";
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
@@ -40,7 +41,7 @@ class MyStack extends TerraformStack {
       }
     })
 
-    new Subnet(this, 'subnet-1a-private', {
+    const subnet1APrivate = new Subnet(this, 'subnet-1a-private', {
       vpcId: vpc.id,
       cidrBlock: '10.0.128.0/20',
       availabilityZone: 'ap-northeast-1a',
@@ -49,13 +50,21 @@ class MyStack extends TerraformStack {
       }
     })
 
-    new Subnet(this, 'subnet-1c-private', {
+    const subnet1CPrivate = new Subnet(this, 'subnet-1c-private', {
       vpcId: vpc.id,
       cidrBlock: '10.0.144.0/20',
       availabilityZone: 'ap-northeast-1c',
       tags: {
         Name: 'cdktf-lambda-rds'
       }
+    })
+
+    new DbSubnetGroup(this, 'db-subnet-group', {
+      name: 'cdktf-lambda-rds',
+      subnetIds: [
+        subnet1APrivate.id,
+        subnet1CPrivate.id
+      ]
     })
   }
 }
