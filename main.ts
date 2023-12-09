@@ -17,7 +17,7 @@ class MyStack extends TerraformStack {
       enableDnsHostnames: true,
       enableDnsSupport: true,
       tags: {
-        Name: 'cdktf-vpc'
+        Name: 'cdktf-lambda-rds'
       }
     })
   }
