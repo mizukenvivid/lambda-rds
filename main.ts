@@ -5,6 +5,7 @@ import { Vpc } from "@cdktf/provider-aws/lib/vpc";
 import { Subnet } from "@cdktf/provider-aws/lib/subnet";
 import { DbSubnetGroup } from "@cdktf/provider-aws/lib/db-subnet-group";
 import { DbParameterGroup } from "@cdktf/provider-aws/lib/db-parameter-group";
+import { DbInstance } from "@cdktf/provider-aws/lib/db-instance";
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
@@ -81,6 +82,23 @@ class MyStack extends TerraformStack {
           value: 'utf8mb4_unicode_ci'
         }
       ]
+    })
+
+    const db = new DbInstance(this, 'db-instance', {
+      engine: 'mysql',
+      engineVersion: '8.0.33',
+      identifier: 'cdktf-lambda-rds',
+      username: 'admin',
+      password: 'password',
+      instanceClass: 'db.t3.micro',
+      allocatedStorage: 20,
+      dbSubnetGroupName: 'cdktf-lambda-rds',
+      publiclyAccessible: false, 
+      vpcSecurityGroupIds: [
+        vpc.defaultSecurityGroupId
+      ],
+      caCertIdentifier: 'rds-ca-2019',
+      parameterGroupName: 'cdktf-lambda-rds',
     })
   }
 }
