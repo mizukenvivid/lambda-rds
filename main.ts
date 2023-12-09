@@ -4,6 +4,7 @@ import { AwsProvider } from '@cdktf/provider-aws/lib/provider'
 import { Vpc } from "@cdktf/provider-aws/lib/vpc";
 import { Subnet } from "@cdktf/provider-aws/lib/subnet";
 import { DbSubnetGroup } from "@cdktf/provider-aws/lib/db-subnet-group";
+import { DbParameterGroup } from "@cdktf/provider-aws/lib/db-parameter-group";
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
@@ -64,6 +65,21 @@ class MyStack extends TerraformStack {
       subnetIds: [
         subnet1APrivate.id,
         subnet1CPrivate.id
+      ]
+    })
+
+    new DbParameterGroup(this, 'db-parameter-group', {
+      name: 'cdktf-lambda-rds',
+      family: 'mysql8.0',
+      parameter: [
+        {
+          name: 'character_set_server',
+          value: 'utf8mb4'
+        },
+        {
+          name: 'collation_server',
+          value: 'utf8mb4_unicode_ci'
+        }
       ]
     })
   }
