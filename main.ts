@@ -2,6 +2,7 @@ import { Construct } from "constructs";
 import { App, TerraformStack } from "cdktf";
 import { AwsProvider } from '@cdktf/provider-aws/lib/provider'
 import { Vpc } from "@cdktf/provider-aws/lib/vpc";
+import { Subnet } from "@cdktf/provider-aws/lib/subnet";
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
@@ -12,10 +13,46 @@ class MyStack extends TerraformStack {
       region: 'ap-northeast-1'
     })
 
-    new Vpc(this, 'vpc', {
+    const vpc = new Vpc(this, 'vpc', {
       cidrBlock: '10.0.0.0/16',
       enableDnsHostnames: true,
       enableDnsSupport: true,
+      tags: {
+        Name: 'cdktf-lambda-rds'
+      }
+    })
+
+    new Subnet(this, 'subnet-1a-public', {
+      vpcId: vpc.id,
+      cidrBlock: '10.0.0.0/20',
+      availabilityZone: 'ap-northeast-1a',
+      tags: {
+        Name: 'cdktf-lambda-rds'
+      }
+    })
+
+    new Subnet(this, 'subnet-1c-public', {
+      vpcId: vpc.id,
+      cidrBlock: '10.0.16.0/20',
+      availabilityZone: 'ap-northeast-1c',
+      tags: {
+        Name: 'cdktf-lambda-rds'
+      }
+    })
+
+    new Subnet(this, 'subnet-1a-private', {
+      vpcId: vpc.id,
+      cidrBlock: '10.0.128.0/20',
+      availabilityZone: 'ap-northeast-1a',
+      tags: {
+        Name: 'cdktf-lambda-rds'
+      }
+    })
+
+    new Subnet(this, 'subnet-1c-private', {
+      vpcId: vpc.id,
+      cidrBlock: '10.0.144.0/20',
+      availabilityZone: 'ap-northeast-1c',
       tags: {
         Name: 'cdktf-lambda-rds'
       }
