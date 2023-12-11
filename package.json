@@ -1,0 +1,10 @@
+{
+  "name": "lambda-rds",
+  "version": "1.0.0",
+  "description": "Lambda RDS",
+  "scripts": {
+    "cdktf:plan": "cdktf plan",
+    "cdktf:deploy": "cdktf deploy",
+    "cdktf:destroy": "cdktf destroy"
+  }
+}
