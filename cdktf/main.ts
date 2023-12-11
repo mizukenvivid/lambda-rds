@@ -1,8 +1,6 @@
 import { Construct } from "constructs";
 import { App, TerraformStack } from "cdktf";
 import { AwsProvider } from '@cdktf/provider-aws/lib/provider'
-import { Vpc } from "@cdktf/provider-aws/lib/vpc";
-import { Subnet } from "@cdktf/provider-aws/lib/subnet";
 
 const tags = {
   Name: 'cdktf-lambda-rds-vpc'
